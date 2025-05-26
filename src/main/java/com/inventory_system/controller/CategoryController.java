@@ -28,11 +28,16 @@ public class CategoryController {
     }
 
     @PostMapping("/add")
-    public String addCategory(@ModelAttribute Category category) {
+    public String addCategory(@ModelAttribute Category category, Model model) {
+        Category existing = categoryService.getCategoryByName(category.getCategoryName());
+        if (existing != null) {
+            model.addAttribute("error", "Category already exists!");
+            model.addAttribute("category", category); // to retain input
+            return "category-create";
+        }
         categoryService.saveCategory(category);
-        return "redirect:/products"; // Kayıt sonrası nereye gitmek istiyorsan oraya yönlendir
+        return "redirect:/products";
     }
-
 
     @GetMapping("/delete/{id}")
     public String deleteCategory(@PathVariable int id) {

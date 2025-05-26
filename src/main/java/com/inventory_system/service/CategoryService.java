@@ -3,6 +3,8 @@ package com.inventory_system.service;
 
 import com.inventory_system.entity.Category;
 import com.inventory_system.repository.CategoryRepository;
+import com.inventory_system.repository.ProductRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,8 @@ public class CategoryService {
 
     @Autowired
     private CategoryRepository categoryRepository;
+    @Autowired
+    private ProductRepository productRepository;
 
     public List<Category> getAllCategories() {
         return categoryRepository.findAll();
@@ -33,5 +37,8 @@ public class CategoryService {
 	public void getCategoryById(int categoryId) {
 		 categoryRepository.findById(categoryId);
 		
+	}
+	public boolean hasProducts(int categoryId) {
+	    return !productRepository.findByCategory_CategoryId(categoryId).isEmpty();
 	}
 }
