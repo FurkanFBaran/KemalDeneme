@@ -17,6 +17,11 @@ public class Category {
     // Bir kategori, birçok ürüne sahip olabilir
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<Product> products;
+    //?
+    @ManyToOne
+    @JoinColumn(name = "admin_id", nullable = false)
+    private Admin admin;
+
 
     // Constructors
     public Category() {
@@ -50,5 +55,14 @@ public class Category {
     public void setProducts(List<Product> products) {
         this.products = products;
     }
+    //?
+    public Admin getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(Admin admin) {
+        this.admin = admin;
+    }
+
 
 }

@@ -1,6 +1,7 @@
 package com.inventory_system.service;
 
 
+import com.inventory_system.entity.Admin;
 import com.inventory_system.entity.Category;
 import com.inventory_system.repository.CategoryRepository;
 import com.inventory_system.repository.ProductRepository;
@@ -25,6 +26,10 @@ public class CategoryService {
     public Category getCategoryByName(String name) {
         return categoryRepository.findByCategoryName(name);
     }
+    public List<Category> getCategoriesByAdmin(Admin admin) {
+        return categoryRepository.findByAdmin(admin);
+    }
+
 
     public Category saveCategory(Category category) {
         return categoryRepository.save(category);

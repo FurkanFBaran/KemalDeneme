@@ -31,32 +31,47 @@ public class ProductController {
     // Ürünleri listeleme
     @GetMapping
     public String viewProducts(@RequestParam(required = false) String category,
-            @RequestParam(required = false) String searchInput,
-            Model model) {
+                               @RequestParam(required = false) String searchInput,
+                               Model model,
+                               HttpSession session) {
 
-    		List<Product> products;
+        String email = (String) session.getAttribute("adminEmail");
+        Admin admin = adminService.findByEmail(email);
 
-    		if (category != null && !category.isEmpty()) {
-    			products = productService.filterByCategory(category);
-    		} else if (searchInput != null && !searchInput.isEmpty()) {
-    			products = productService.searchByName(searchInput);
-    		} else {
-    			products = productService.getAllProducts();
-    		}
+        List<Product> products;
 
-    		model.addAttribute("products", products);
-    		model.addAttribute("categories", categoryService.getAllCategories());
-    		model.addAttribute("selectedCategory", category);
-    		return "products"; // must match the name of the Thymeleaf template (products.html)
+        if (category != null && !category.isEmpty()) {
+            products = productService.filterByCategory(category)
+                                     .stream()
+                                     .filter(p -> p.getAdmin().getAdminId() == admin.getAdminId())
+                                     .toList();
+        } else if (searchInput != null && !searchInput.isEmpty()) {
+            products = productService.searchByName(searchInput)
+                                     .stream()
+                                     .filter(p -> p.getAdmin().getAdminId() == admin.getAdminId())
+                                     .toList();
+        } else {
+            products = productService.getProductsByAdmin(admin);
+        }
+
+        model.addAttribute("products", products);
+        model.addAttribute("categories", categoryService.getAllCategories());
+        model.addAttribute("selectedCategory", category);
+        return "products";
     }
+
 
     // Ürün ekleme formu
     @GetMapping("/create")
-    public String showCreateProductForm(Model model) {
+    public String showCreateProductForm(HttpSession session, Model model) {
+        String email = (String) session.getAttribute("adminEmail");
+        Admin admin = adminService.findByEmail(email);
+
         model.addAttribute("product", new Product());
-        model.addAttribute("categories", categoryService.getAllCategories());
-        return "product-create"; // templates/product-create.html
+        model.addAttribute("categories", categoryService.getCategoriesByAdmin(admin));  // sadece o adminin kategorileri
+        return "product-create";
     }
+
 
     // Ürün kaydetme
     @PostMapping("/add")

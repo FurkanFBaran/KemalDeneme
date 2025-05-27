@@ -1,6 +1,7 @@
 package com.inventory_system.repository;
 
 
+import com.inventory_system.entity.Admin;
 import com.inventory_system.entity.Category;
 import com.inventory_system.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,5 +17,8 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     List<Product> findByCategory_CategoryName(String categoryName); // Kategoriye göre filtreleme
 
 	List<Category> findByCategory_CategoryId(int categoryId);
+	
+	List<Product> findByAdmin(Admin admin);
+
 
 }

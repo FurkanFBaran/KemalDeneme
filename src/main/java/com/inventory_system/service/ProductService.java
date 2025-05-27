@@ -2,6 +2,7 @@ package com.inventory_system.service;
 
 
 
+import com.inventory_system.entity.Admin;
 import com.inventory_system.entity.Product;
 import com.inventory_system.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,5 +43,9 @@ public class ProductService {
     public List<Product> filterByCategory(String categoryName) {
         return productRepository.findByCategory_CategoryName(categoryName);
     }
+    public List<Product> getProductsByAdmin(Admin admin) {
+        return productRepository.findByAdmin(admin);
+    }
+
 }
 
