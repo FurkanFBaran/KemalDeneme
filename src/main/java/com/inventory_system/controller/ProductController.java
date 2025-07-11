@@ -55,7 +55,8 @@ public class ProductController {
         }
 
         model.addAttribute("products", products);
-        model.addAttribute("categories", categoryService.getAllCategories());
+        //fix for filtered categorys by each admin
+        model.addAttribute("categories", categoryService.getCategoriesByAdmin(admin));
         model.addAttribute("selectedCategory", category);
         return "products";
     }
