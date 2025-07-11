@@ -96,10 +96,13 @@ public class ProductController {
 
     // Ürün düzenleme formu
     @GetMapping("/edit/{id}")
-    public String showEditForm(@PathVariable int id, Model model) {
+    public String showEditForm(@PathVariable int id, Model model, HttpSession session) {
+        String email = (String) session.getAttribute("adminEmail");
+        Admin admin = adminService.findByEmail(email);
+
         Product product = productService.getProductById(id);
         model.addAttribute("product", product);
-        model.addAttribute("categories", categoryService.getAllCategories());
+        model.addAttribute("categories", categoryService.getCategoriesByAdmin(admin));
         return "edit-product";
     }
 
